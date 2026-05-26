@@ -2,15 +2,9 @@
 
 namespace App\Http\Controllers\Api\Blog;
 
-use App\Models\BlogPost;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
-class PostController extends BaseController
+abstract class BaseController extends Controller
 {
-    public function index()
-    {
-        $items = BlogPost::all();
-
-        return $items;
-    }
+    //
 }

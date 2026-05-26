@@ -2,8 +2,9 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-// Імпортуємо твій контролер явно, щоб Laravel точно знав де він
+
 use App\Http\Controllers\Api\Blog\PostController;
+use App\Http\Controllers\Api\Blog\Admin\CategoryController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -11,4 +12,11 @@ Route::get('/user', function (Request $request) {
 
 Route::prefix('blog')->group(function () {
     Route::apiResource('posts', PostController::class)->names('blog.posts');
+});
+Route::prefix('admin/blog')->group(function () {
+    $methods = ['index', 'store', 'update'];
+
+    Route::apiResource('categories', CategoryController::class)
+        ->only($methods)
+        ->names('blog.admin.categories');
 });

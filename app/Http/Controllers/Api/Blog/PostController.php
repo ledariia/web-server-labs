@@ -12,7 +12,9 @@ class PostController extends Controller
      */
     public function index()
     {
-        //
+        $items = BlogPost::all();
+
+        return $items;
     }
 
     /**
