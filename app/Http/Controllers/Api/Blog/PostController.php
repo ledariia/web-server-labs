@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Api\Blog;
 
-use App\Http\Controllers\Controller;
+use App\Models\BlogPost; // ДОДАНО: підключаємо модель
 use Illuminate\Http\Request;
 
-class PostController extends Controller
+class PostController extends BaseController // ВИПРАВЛЕНО: успадковуємо від BaseController
 {
     /**
      * Display a listing of the resource.

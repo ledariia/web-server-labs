@@ -1,4 +1,5 @@
 <?php
+use App\Http\Controllers\DiggingDeeperController;
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RestTestController;
@@ -17,3 +18,12 @@ Route::middleware([
     })->name('dashboard');
 });
 Route::apiResource('rest', RestTestController::class)->names('restTest');
+
+
+Route::group(['prefix' => 'digging_deeper'], function () {
+
+    Route::get('collections', [DiggingDeeperController::class, 'collections'])
+
+        ->name('digging_deeper.collections');
+
+});
