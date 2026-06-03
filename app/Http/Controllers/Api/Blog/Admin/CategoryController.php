@@ -3,17 +3,23 @@
 namespace App\Http\Controllers\Api\Blog\Admin;
 use App\Http\Requests\BlogCategoryUpdateRequest;
 use App\Models\BlogCategory;
+use App\Repositories\BlogCategoryRepository;
+
 //use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Http\Requests\BlogCategoryCreateRequest;
 
 class CategoryController extends BaseController
 {
+    public function __construct(private BlogCategoryRepository $blogCategoryRepository)
+    {
+        //parent::__construct();
 
+    }
     public function index()
     {
-        $paginator = BlogCategory::paginate(5);
-
+        //$paginator = BlogCategory::paginate(5);
+        $paginator = $this->blogCategoryRepository->getAllWithPaginate(5);
         return $paginator;
     }
 
@@ -40,7 +46,7 @@ class CategoryController extends BaseController
 
     public function update(BlogCategoryUpdateRequest $request, $id)
     {
-        $item = BlogCategory::find($id);
+        $item = $this->blogCategoryRepository->getEdit($id);
 
         if (empty($item)) {
             return ['message' => "Запис id=[{$id}] не знайдено"];
