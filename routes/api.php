@@ -25,3 +25,10 @@ Route::prefix('admin/blog')->group(function () {
         ->except(['show'])
         ->names('blog.admin.posts');
 });
+Route::group(['prefix' => 'digging_deeper'], function () {
+    Route::get('process-video', [\App\Http\Controllers\DiggingDeeperController::class, 'processVideo'])
+        ->name('digging_deeper.processVideo');
+
+    Route::get('prepare-catalog', [\App\Http\Controllers\DiggingDeeperController::class, 'prepareCatalog'])
+        ->name('digging_deeper.prepareCatalog');
+});
