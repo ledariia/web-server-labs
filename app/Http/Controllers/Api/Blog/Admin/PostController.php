@@ -10,6 +10,8 @@ use App\Models\BlogPost;
 use App\Http\Requests\BlogPostCreateRequest;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Jobs\BlogPostAfterCreateJob;
+use App\Jobs\BlogPostAfterDeleteJob;
 
 class PostController extends BaseController
 {
@@ -36,10 +38,12 @@ class PostController extends BaseController
     public function store(BlogPostCreateRequest $request)
     {
         $data = $request->input(); // отримуємо масив даних
-
         $item = (new BlogPost())->create($data); // створюємо в БД
 
         if ($item) {
+            // Відправляємо завдання в чергу
+            BlogPostAfterCreateJob::dispatch($item);
+
             return ['success' => true, 'message' => 'Успішно збережено'];
         } else {
             return ['success' => false, 'msg' => 'Помилка збереження'];
@@ -80,15 +84,13 @@ class PostController extends BaseController
         $result = BlogPost::destroy($id); // софт деліт (запис лишається в базі, але позначається як видалений)
 
         if ($result) {
-            return [
-                'success' => true,
-                'message' => "Запис з ID [{$id}] успішно видалено"
-            ];
+            // Відправляємо завдання з відкладеним стартом у 20 секунд
+            BlogPostAfterDeleteJob::dispatch($id)->delay(20);
+
+            return ['success' => true, 'message' => "Запис з ID [{$id}] успішно видалено"];
         } else {
-            return [
-                'success' => false,
-                'msg' => 'Помилка видалення запису'
-            ];
+            return ['success' => false, 'msg' => 'Помилка видалення запису'];
         }
     }
+
 }
