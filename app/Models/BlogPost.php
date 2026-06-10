@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory; // 1. Додали цей
 class BlogPost extends Model
 {
     use HasFactory, SoftDeletes; // 2. Додали HasFactory сюди
-
+    const UNKNOWN_USER = 1;
     protected $fillable = [
         'title',
         'slug',
@@ -18,7 +18,7 @@ class BlogPost extends Model
         'content_raw',
         'is_published',
         'published_at',
-        'user_id',
+        //'user_id',
     ];
 
     /**

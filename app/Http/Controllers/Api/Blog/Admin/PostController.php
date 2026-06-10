@@ -6,7 +6,8 @@ use App\Http\Controllers\Api\Blog\Admin\BaseController;
 use App\Repositories\BlogPostRepository;
 use App\Repositories\BlogCategoryRepository;
 use App\Http\Requests\BlogPostUpdateRequest;
-
+use App\Models\BlogPost;
+use App\Http\Requests\BlogPostCreateRequest;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
@@ -32,11 +33,18 @@ class PostController extends BaseController
     /**
      * Зберегти нову статтю (store)
      */
-    public function store(Request $request)
+    public function store(BlogPostCreateRequest $request)
     {
-        //
-    }
+        $data = $request->input(); // отримуємо масив даних
 
+        $item = (new BlogPost())->create($data); // створюємо в БД
+
+        if ($item) {
+            return ['success' => true, 'message' => 'Успішно збережено'];
+        } else {
+            return ['success' => false, 'msg' => 'Помилка збереження'];
+        }
+    }
     /**
      * Оновити статтю (update)
      */
@@ -67,8 +75,20 @@ class PostController extends BaseController
     /**
      * Видалити статтю (destroy)
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        $result = BlogPost::destroy($id); // софт деліт (запис лишається в базі, але позначається як видалений)
+
+        if ($result) {
+            return [
+                'success' => true,
+                'message' => "Запис з ID [{$id}] успішно видалено"
+            ];
+        } else {
+            return [
+                'success' => false,
+                'msg' => 'Помилка видалення запису'
+            ];
+        }
     }
 }
