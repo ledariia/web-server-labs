@@ -8,7 +8,7 @@ use App\Repositories\BlogCategoryRepository;
 //use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Http\Requests\BlogCategoryCreateRequest;
-
+use App\Http\Resources\Api\Blog\Admin\CategoryResource;
 class CategoryController extends BaseController
 {
     public function __construct(private BlogCategoryRepository $blogCategoryRepository)
@@ -18,9 +18,10 @@ class CategoryController extends BaseController
     }
     public function index()
     {
-        //$paginator = BlogCategory::paginate(5);
-        $paginator = $this->blogCategoryRepository->getAllWithPaginate(5);
-        return $paginator;
+        $paginator = $this->blogCategoryRepository->getAllWithPaginate();
+
+        // Використовуємо ресурс для категорій
+        return CategoryResource::collection($paginator);
     }
 
 
