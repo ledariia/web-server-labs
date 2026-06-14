@@ -16,9 +16,7 @@ Route::prefix('admin/blog')->group(function () {
     $methods = ['index', 'store', 'update'];
 
     // Маршрути для категорій
-    Route::apiResource('categories', CategoryController::class)
-        ->only($methods)
-        ->names('blog.admin.categories');
+    Route::apiResource('posts', AdminPostController::class)->names('blog.admin.posts');
 
     // Маршрути для постів (використовуємо AdminPostController)
     Route::apiResource('posts', AdminPostController::class)
