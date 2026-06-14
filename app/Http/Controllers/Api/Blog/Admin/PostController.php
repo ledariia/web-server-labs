@@ -31,7 +31,17 @@ class PostController extends BaseController
 
         return $paginator;
     }
+    public function show($id)
+    {
+        // Використовуємо твій репозиторій для пошуку поста
+        $item = $this->blogPostRepository->getEdit($id);
 
+        if (empty($item)) {
+            return response()->json(['message' => "Запис id=[{$id}] не знайдено"], 404);
+        }
+
+        return $item;
+    }
     /**
      * Зберегти нову статтю (store)
      */
