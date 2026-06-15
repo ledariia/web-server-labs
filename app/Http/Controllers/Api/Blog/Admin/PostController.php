@@ -17,7 +17,22 @@ use App\Http\Resources\Api\Blog\Admin\PostResource;
 class PostController extends BaseController
 {
     private BlogCategoryRepository $blogCategoryRepository; // властивість через яку будемо звертатись в репозиторій категорій
-
+    public function toArray(Request $request): array
+    {
+        return [
+            'id'             => $this->id,
+            'title'          => $this->title,
+            'slug'           => $this->slug,
+            'is_published'   => (bool) $this->is_published,
+            'content_raw'    => $this->content_raw,
+            'excerpt'        => $this->excerpt,
+            'date_published' => $this->published_at ? $this->published_at->format('Y-m-d H:i:s') : null,
+            'user_id'        => $this->user_id,
+            'category_id'    => $this->category_id,
+            'user'           => $this->user ? ['name' => $this->user->name] : null,
+            'category'       => $this->category ? ['title' => $this->category->title] : null,
+        ];
+    }
     public function __construct(private BlogPostRepository $blogPostRepository)
     {
         //parent::__construct();

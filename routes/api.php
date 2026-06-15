@@ -13,16 +13,19 @@ Route::get('/user', function (Request $request) {
 
 // Адмінка
 Route::prefix('admin/blog')->group(function () {
-    $methods = ['index', 'store', 'update'];
+    // Вказуємо всі методи, які потрібні для CRUD (Лабораторна 18)
+    $methods = ['index', 'store', 'update', 'destroy', 'show'];
 
-    // Маршрути для категорій
-    Route::apiResource('posts', AdminPostController::class)->names('blog.admin.posts');
+    // Маршрути для категорій (ВИПРАВЛЕНО)
+    Route::apiResource('categories', CategoryController::class)
+        ->only($methods)
+        ->names('blog.admin.categories');
 
-    // Маршрути для постів (використовуємо AdminPostController)
+    // Маршрути для постів (ВИПРАВЛЕНО: прибрали except('show'))
     Route::apiResource('posts', AdminPostController::class)
-        ->except(['show'])
         ->names('blog.admin.posts');
 });
+
 Route::group(['prefix' => 'digging_deeper'], function () {
     Route::get('process-video', [\App\Http\Controllers\DiggingDeeperController::class, 'processVideo'])
         ->name('digging_deeper.processVideo');
